@@ -1,4 +1,7 @@
+from typing import Optional
+
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -35,3 +38,22 @@ def search(author : str, year : int = None, category : str = None):
 def show_book(id : int):
     return {"data" : {"id" : id}}
 
+
+class Blog(BaseModel):
+    title : str
+    content : str
+    published : Optional[bool] = None
+
+@app.post("/blogs")
+def create_blog(blog : Blog):
+    return {"data" : f"Blog created with title: {blog.title}, content: {blog.content}, published: {blog.published}"}
+
+
+class Dictionary(BaseModel):
+   name : str
+   age : int
+   course : str
+
+@app.post("/dictionary")
+def create_dictionary(dictionary : Dictionary) :
+    return { "data" : dictionary, "message" : f"Welcome, {dictionary.name}!"}
