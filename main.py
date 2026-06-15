@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from schemas import Student
 
 app = FastAPI()
 
@@ -57,3 +58,7 @@ class Dictionary(BaseModel):
 @app.post("/dictionary")
 def create_dictionary(dictionary : Dictionary) :
     return { "data" : dictionary, "message" : f"Welcome, {dictionary.name}!"}
+
+@app.post("/students")
+def create_student(student : Student):
+    return {"data" : student, "message" : f"Student {student.name} created successfully!"}

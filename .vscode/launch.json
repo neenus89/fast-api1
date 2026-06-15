@@ -6,12 +6,12 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
-            "args": [
-                "main:app", // Ensure this matches your file name
+           "args": [
+                "main:app",
                 "--reload"
             ],
             "jinja": true,
-            "subProcess": true  // <-- ADD THIS LINE
+            "subProcess": true
         }
     ]
 }
