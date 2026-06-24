@@ -1,8 +1,10 @@
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from schemas import Student
+from schemas import StudentResponse
+from schemas import UserRegister
 
 app = FastAPI()
 
@@ -59,6 +61,18 @@ class Dictionary(BaseModel):
 def create_dictionary(dictionary : Dictionary) :
     return { "data" : dictionary, "message" : f"Welcome, {dictionary.name}!"}
 
-@app.post("/students")
-def create_student(student : Student):
-    return {"data" : student, "message" : f"Student {student.name} created successfully!"}
+@app.post("/students", response_model=StudentResponse)
+def create_student(student : Student) :
+    student_response = StudentResponse(id=1, name=student.name, age=student.age)
+    return student_response
+
+@app.post("/register")
+def register_user(user : UserRegister) :
+    if not any(char.isupper() for char in user.password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one uppercase letter")
+    if not any(char.islower() for char in user.password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one lowercase letter")
+    if not any(char.isdigit() for char in user.password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one digit")
+    
+    return {"data" : user, "message" : "User registered successfully"}
